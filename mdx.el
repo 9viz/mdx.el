@@ -39,6 +39,7 @@
 
 ;;; Code:
 (require 'url)
+(require 'org)
 
 ;; Ref: https://api.mangadex.org/docs/redoc.html
 (defgroup mdx nil
@@ -89,7 +90,7 @@
   :type '(function))
 
 (defcustom mdx-username ""
-  "Username of the mangadex account"
+  "Username of the mangadex account."
   :type '(string))
 
 (defvar mdx--cached-tokens nil)
