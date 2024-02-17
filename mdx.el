@@ -246,7 +246,7 @@ Returns the string \"unknown\" if this is unknown."
 (defun mdx--get-artist-or-author-field (ht type field)
   "Return the field FIELD for artist or author of the manga HT.
 TYPE is the type of author/artist to fetch."
-  (vz/filter-map
+  (seq-keep
    (lambda (r)
      (when (equal (gethash "type" r) type)
        (let ((ht (if (gethash "attributes" r)
@@ -279,7 +279,7 @@ TYPE is the type of author/artist to fetch."
 
 (defun mdx-get-cover-url (ht)
   "Get the cover URL for the manga HT."
-  (let ((cover (vz/findf (lambda (r)
+  (let ((cover (seq-find (lambda (r)
                            (equal "cover_art" (gethash "type" r)))
                          (mdx-gethash ht "relationships"))))
     (if (gethash "fileName" cover)
@@ -289,7 +289,7 @@ TYPE is the type of author/artist to fetch."
 (defun mdx-fetch-cover-url (ht)
   "Fetch the cover URL for the manga HT."
   (let* ((cover-id (gethash "id"
-                            (vz/findf (lambda (r)
+                            (seq-find (lambda (r)
                                         (equal "cover_art" (gethash "type" r)))
                                       (mdx-gethash ht "relationships"))))
          (manga-id (mdx-get-manga-id ht))
@@ -423,7 +423,7 @@ The key value nil means no reading status set."
         (insert description)
         (save-restriction
           (narrow-to-region point (point-max))
-          (vz/nov-repunctuate-sentences)
+          ;; (vz/nov-repunctuate-sentences)
           (fill-region (point-min) (point-max))
           (let ((point (point)))
             (when (< (skip-chars-backward "\n[:space:]") 0)
